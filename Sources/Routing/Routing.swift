@@ -19,7 +19,6 @@ import Datable
 //FIXME: make more generic/universal
 //FIXME: write tests
 
-
 struct Routing {
     var text = "Hello, World!"
 }
@@ -618,3 +617,53 @@ public func setDNS()
 {
     //FIXME:  add function(s) to set name servers / DNS servers
 }
+
+
+public func setMTU(interface: String, mtu: Int) -> Bool
+{
+    //ifconfig enp0s6 mtu 1380
+
+    if mtu > 1600 || mtu < 128
+    {
+        print("mtu out of bounds")
+        return true
+    }
+
+    let task = Process()
+
+    let outputPipe = Pipe()
+    let errorPipe = Pipe()
+
+    task.standardOutput = outputPipe
+    task.standardError = errorPipe
+
+    task.executableURL = URL(fileURLWithPath: "/sbin/ifconfig")
+
+    //print("enabling NAT for \(serverPublicInterface)")
+    task.arguments = [  interface, "mtu", mtu.string ]
+
+    do {
+        try task.run()
+        task.waitUntilExit()
+        print("done setting mtu to \(mtu.string)")
+    }
+    catch {
+        print("error: \(error)")
+        return true
+    }
+
+    let outputData = outputPipe.fileHandleForReading.readDataToEndOfFile()
+    let errorData = errorPipe.fileHandleForReading.readDataToEndOfFile()
+
+    let output = String(decoding: outputData, as: UTF8.self)
+    //print("iptables NAT config output: \(output)")
+    let error = String(decoding: errorData, as: UTF8.self)
+
+    if error != "" {
+        print("Error:\n\(error)\n")
+    }
+
+    return false
+
+}
+
