@@ -279,7 +279,7 @@ public func setIPv4Forwarding(setTo: Bool) -> Bool
 }
 
 
-public func setClientRouteV6(serverTunAddress: String, localTunName: String) -> Bool
+public func setClientRouteV6(destinationAddress: String, gatewayAddress: String, interfaceName: String) -> Bool
 {
     //FIXME: add input checking
 
@@ -296,7 +296,7 @@ public func setClientRouteV6(serverTunAddress: String, localTunName: String) -> 
 
     task.executableURL = URL(fileURLWithPath: "/sbin/ip")
 
-    task.arguments = ["-6", "route", "add", "default", "dev", localTunName, "metric", "1"]
+    task.arguments = ["-6", "route", "add", destinationAddress, "dev", interfaceName, "metric", "1"]
 
     do {
         try task.run()
@@ -323,12 +323,17 @@ public func setClientRouteV6(serverTunAddress: String, localTunName: String) -> 
     return false
 }
 
-public func setClientRoute(serverTunAddress: String, localTunName: String) -> Bool
+public func setClientRoute(destinationAddress: String, gatewayAddress: String, interfaceName: String) -> Bool
 {
     //set -- route add default gw 10.4.2.5 tun0
     //get -- netstat -r
 
     //sudo ip -6 route add fe80::f97e:48da:d889:cb22 dev tun0
+
+
+    //FIXME: in routing.swift, add function to set route allowing traffic to vpn server to go over the internet connected interface:
+    //route add 143.110.154.116 gw 10.211.55.1 enp0s5
+
 
     let task = Process()
 
@@ -341,7 +346,7 @@ public func setClientRoute(serverTunAddress: String, localTunName: String) -> Bo
     //FIXME: change route command to ip  command
     task.executableURL = URL(fileURLWithPath: "/sbin/route")
 
-    task.arguments = ["add", "default", "gw", serverTunAddress, localTunName]
+    task.arguments = ["add", destinationAddress, "gw", gatewayAddress, interfaceName]
 
     do {
         try task.run()
