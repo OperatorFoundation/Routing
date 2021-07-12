@@ -514,7 +514,7 @@ public func deleteServerNAT(serverPublicInterface: String) -> Bool
     }
     catch {
         print("error: \(error)")
-        return true
+        return false
     }
 
     let outputData = outputPipe.fileHandleForReading.readDataToEndOfFile()
@@ -526,10 +526,10 @@ public func deleteServerNAT(serverPublicInterface: String) -> Bool
 
     if error != "" {
         //print("Error:\n\(error)\n")
-        return true
+        return false
     }
 
-    return false
+    return true
 }
 
 
