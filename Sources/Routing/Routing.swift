@@ -115,7 +115,7 @@ public func setAddress(interfaceName: String, addressString: String, subnetStrin
         print("done setting address")
     }
     catch {
-        print("error: \(error)")
+        print("error setting address: \(error)")
         return true
     }
 
@@ -127,7 +127,7 @@ public func setAddress(interfaceName: String, addressString: String, subnetStrin
 
     if output != "" || error != "" {
         print("Output:\n\(output)\n")
-        print("Error:\n\(error)\n")
+        print("StdErr:\n\(error)\n")
     }
 
     return false
@@ -160,7 +160,7 @@ public func setAddressV6(interfaceName: String, addressString: String, subnetPre
         print("done setting address")
     }
     catch {
-        print("error: \(error)")
+        print("error setting address: \(error)")
         return true
     }
 
@@ -172,7 +172,7 @@ public func setAddressV6(interfaceName: String, addressString: String, subnetPre
 
     if output != "" || error != "" {
         print("Output:\n\(output)\n")
-        print("Error:\n\(error)\n")
+        print("StdErr:\n\(error)\n")
     }
 
     return false
@@ -209,7 +209,7 @@ public func setIPv6Forwarding(setTo: Bool) -> Bool
         print("done ip_forward")
     }
     catch {
-        print("error: \(error)")
+        print("ip_forward error: \(error)")
         return true
     }
 
@@ -221,7 +221,7 @@ public func setIPv6Forwarding(setTo: Bool) -> Bool
     let error = String(decoding: errorData, as: UTF8.self)
 
     if error != "" {
-        print("Error:\n\(error)\n")
+        print("StdErr:\n\(error)\n")
     }
 
     return false
@@ -260,7 +260,7 @@ public func setIPv4Forwarding(setTo: Bool) -> Bool
         print("done ip_forward")
     }
     catch {
-        print("error: \(error)")
+        print("ip_forward error: \(error)")
         return true
     }
 
@@ -272,7 +272,7 @@ public func setIPv4Forwarding(setTo: Bool) -> Bool
     let error = String(decoding: errorData, as: UTF8.self)
 
     if error != "" {
-        print("Error:\n\(error)\n")
+        print("StdErr:\n\(error)\n")
     }
 
     return false
@@ -294,7 +294,7 @@ public func setClientRouteV6(destinationAddress: String, gatewayAddress: String,
     task.standardOutput = outputPipe
     task.standardError = errorPipe
 
-    task.executableURL = URL(fileURLWithPath: "/sbin/ip")
+    task.executableURL = URL(fileURLWithPath: "/usr/sbin/ip")
 
     task.arguments = ["-6", "route", "add", destinationAddress, "dev", interfaceName, "metric", "1"]
 
@@ -304,7 +304,7 @@ public func setClientRouteV6(destinationAddress: String, gatewayAddress: String,
         print("done set client route")
     }
     catch {
-        print("error: \(error)")
+        print("error setting client route: \(error)")
         return true
     }
 
@@ -317,7 +317,7 @@ public func setClientRouteV6(destinationAddress: String, gatewayAddress: String,
 
     if error != "" {
         print("Output:\n\(output)\n")
-        print("Error:\n\(error)\n")
+        print("Error setting default ipv6 route output:\n\(error)\n")
     }
 
     return false
@@ -354,7 +354,7 @@ public func setClientRoute(destinationAddress: String, gatewayAddress: String, i
         print("done set client route")
     }
     catch {
-        print("error: \(error)")
+        print("error setting client route: \(error)")
         return true
     }
 
@@ -367,7 +367,7 @@ public func setClientRoute(destinationAddress: String, gatewayAddress: String, i
 
     if error != "" {
         print("Output:\n\(output)\n")
-        print("Error:\n\(error)\n")
+        print("StdErr:\n\(error)\n")
     }
 
     return false
@@ -394,7 +394,7 @@ public func getNATv6() -> String
         print("done get nat")
     }
     catch {
-        print("error: \(error)")
+        print("get nat error: \(error)")
         return "error"
     }
 
@@ -407,7 +407,7 @@ public func getNATv6() -> String
 
     if error != "" {
 
-        print("Error:\n\(error)\n")
+        print("StdErr:\n\(error)\n")
     }
 
     return output
@@ -434,7 +434,7 @@ public func getNAT() -> String
         print("done get nat")
     }
     catch {
-        print("error: \(error)")
+        print("get nat error: \(error)")
         return "error"
     }
 
@@ -447,7 +447,7 @@ public func getNAT() -> String
 
     if error != "" {
 
-        print("Error:\n\(error)\n")
+        print("StdErr:\n\(error)\n")
     }
 
     return output
@@ -465,7 +465,7 @@ public func deleteServerNATv6(serverPublicInterface: String) -> Bool
     task.standardOutput = outputPipe
     task.standardError = errorPipe
 
-    task.executableURL = URL(fileURLWithPath: "/sbin/ip6tables")
+    task.executableURL = URL(fileURLWithPath: "/usr/sbin/ip6tables")
     task.arguments = ["-t", "nat", "-D", "POSTROUTING", "-j", "MASQUERADE", "-o", serverPublicInterface]
 
     do {
@@ -474,7 +474,7 @@ public func deleteServerNATv6(serverPublicInterface: String) -> Bool
         print("done delete nat")
     }
     catch {
-        print("error: \(error)")
+        print("error deleting nat: \(error)")
         return true
     }
 
@@ -486,7 +486,7 @@ public func deleteServerNATv6(serverPublicInterface: String) -> Bool
     let error = String(decoding: errorData, as: UTF8.self)
 
     if error != "" {
-        //print("Error:\n\(error)\n")
+        //print("StdErr:\n\(error)\n")
         return true
     }
 
@@ -513,7 +513,7 @@ public func deleteServerNAT(serverPublicInterface: String) -> Bool
         print("done delete nat")
     }
     catch {
-        print("error: \(error)")
+        print("error deleting server NAT: \(error)")
         return false
     }
 
@@ -525,7 +525,7 @@ public func deleteServerNAT(serverPublicInterface: String) -> Bool
     let error = String(decoding: errorData, as: UTF8.self)
 
     if error != "" {
-        //print("Error:\n\(error)\n")
+        //print("StdErr:\n\(error)\n")
         return false
     }
 
@@ -556,7 +556,7 @@ public func configServerNATv6(serverPublicInterface: String) -> Bool
         print("done config nat")
     }
     catch {
-        print("error: \(error)")
+        print("error deleting server NAT: \(error)")
         return true
     }
 
@@ -568,7 +568,7 @@ public func configServerNATv6(serverPublicInterface: String) -> Bool
     let error = String(decoding: errorData, as: UTF8.self)
 
     if error != "" {
-        print("Error:\n\(error)\n")
+        print("StdErr:\n\(error)\n")
     }
 
     return false
@@ -589,7 +589,7 @@ public func configServerNAT(serverPublicInterface: String) -> Bool
     task.standardOutput = outputPipe
     task.standardError = errorPipe
 
-    task.executableURL = URL(fileURLWithPath: "/sbin/iptables")
+    task.executableURL = URL(fileURLWithPath: "/usr/sbin/iptables")
 
     //print("enabling NAT for \(serverPublicInterface)")
     task.arguments = ["-t", "nat", "-A", "POSTROUTING", "-j", "MASQUERADE", "-o", serverPublicInterface ]
@@ -600,7 +600,7 @@ public func configServerNAT(serverPublicInterface: String) -> Bool
         print("done config nat")
     }
     catch {
-        print("error: \(error)")
+        print("nat config error: \(error)")
         return true
     }
 
@@ -612,7 +612,7 @@ public func configServerNAT(serverPublicInterface: String) -> Bool
     let error = String(decoding: errorData, as: UTF8.self)
 
     if error != "" {
-        print("Error:\n\(error)\n")
+        print("StdErr:\n\(error)\n")
     }
 
     return false
@@ -653,7 +653,7 @@ public func setMTU(interface: String, mtu: Int) -> Bool
         print("done setting mtu to \(mtu.string)")
     }
     catch {
-        print("error: \(error)")
+        print("error setting mtu: \(error)")
         return true
     }
 
@@ -665,7 +665,7 @@ public func setMTU(interface: String, mtu: Int) -> Bool
     let error = String(decoding: errorData, as: UTF8.self)
 
     if error != "" {
-        print("Error:\n\(error)\n")
+        print("StdErr:\n\(error)\n")
     }
 
     return false
