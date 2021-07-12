@@ -424,7 +424,7 @@ public func getNAT() -> String
     task.standardOutput = outputPipe
     task.standardError = errorPipe
 
-    task.executableURL = URL(fileURLWithPath: "/sbin/iptables")
+    task.executableURL = URL(fileURLWithPath: "/usr/sbin/iptables")
 
     task.arguments = ["-t", "nat", "-n", "-L", "-v"]
 
