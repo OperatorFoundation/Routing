@@ -151,6 +151,10 @@ public func setAddressV6(interfaceName: String, addressString: String, subnetPre
     task.executableURL = URL(fileURLWithPath: "/sbin/ip")
 
     let CIDRAddress = addressString + "/" + subnetPrefix.string
+    
+    // -6: sets protocol family to inet6
+    // addr: Shows addresses assigned to all network interfaces
+    // add CIRAddress dev interfaceName: Add address (CIRAddress) to device (interfaceName)
     task.arguments = ["-6", "addr", "add", CIDRAddress, "dev", interfaceName]
 
     print("Setting \(interfaceName) address to \(addressString) netmask \(subnetPrefix)")
@@ -195,11 +199,15 @@ public func setIPv6Forwarding(setTo: Bool) -> Bool
 
     if setTo {
         print("enabling net.ipv6.conf.all.forwarding")
+        
+        // -w: write when all arguments prescribe a key to be set
         task.arguments = ["-w", "net.ipv6.conf.all.forwarding=1"]
     }
     else
     {
         print("disabling net.ipv6.conf.all.forwarding")
+        
+        // -w: write when all arguments prescribe a key to be set
         task.arguments = ["-w", "net.ipv6.conf.all.forwarding=0"]
     }
 
@@ -245,11 +253,15 @@ public func setIPv4Forwarding(setTo: Bool) -> Bool
 
     if setTo {
         print("enabling net.ipv4.ip_forward")
+        
+        // -w: write when all arguments prescribe a key to be set
         task.arguments = ["-w", "net.ipv4.ip_forward=1"]
     }
     else
     {
         print("disabling net.ipv4.ip_forward")
+        
+        // -w: write when all arguments prescribe a key to be set
         task.arguments = ["-w", "net.ipv4.ip_forward=0"]
 
     }
@@ -296,6 +308,10 @@ public func setClientRouteV6(destinationAddress: String, gatewayAddress: String,
 
     task.executableURL = URL(fileURLWithPath: "/usr/sbin/ip")
 
+    // -6: sets protocol family to inet6
+    // route: List all of the route entries in the kernel
+    // add destinationAddress dev interfaceName: Add address (destinationAddress) to device (interfaceName)
+    // metric 1: sets the metric(cost) of the operation
     task.arguments = ["-6", "route", "add", destinationAddress, "dev", interfaceName, "metric", "1"]
 
     do {
@@ -346,6 +362,8 @@ public func setClientRoute(destinationAddress: String, gatewayAddress: String, i
     //FIXME: change route command to ip  command
     task.executableURL = URL(fileURLWithPath: "/sbin/route")
 
+    // add: add a route (destinationAddress)
+    // gw: assign a gateway address
     task.arguments = ["add", destinationAddress, "gw", gatewayAddress, interfaceName]
 
     do {
@@ -386,6 +404,10 @@ public func getNATv6() -> String
 
     task.executableURL = URL(fileURLWithPath: "/sbin/ip6tables")
 
+    // -t (table): use (NAT) table [prerouting, output, postrouting]
+    // -n: --numeric: print IP and port in numeric format
+    // -L: list all rules in the selected chain
+    // -v: --verbose: make list command show the interface name, rule options, and TOS masks
     task.arguments = ["-t", "nat", "-n", "-L", "-v"]
 
     do {
@@ -426,6 +448,10 @@ public func getNAT() -> String
 
     task.executableURL = URL(fileURLWithPath: "/usr/sbin/iptables")
 
+    // -t (table): use (NAT) table [prerouting, output, postrouting]
+    // -n: --numeric: print IP and port in numeric format
+    // -L: list all rules in the selected chain
+    // -v: --verbose: make list command show the interface name, rule options, and TOS masks
     task.arguments = ["-t", "nat", "-n", "-L", "-v"]
 
     do {
@@ -466,6 +492,11 @@ public func deleteServerNATv6(serverPublicInterface: String) -> Bool
     task.standardError = errorPipe
 
     task.executableURL = URL(fileURLWithPath: "/usr/sbin/ip6tables")
+    
+    // -t (table): use (NAT) table [prerouting, output, postrouting]
+    // -D: --delete (chain) (rulenum/rule-specification): delete one or more rules (-j MASQUERADE -o serverPublicInterface) from the selected chain (POSTROUTING)
+    // -j: --jump (target): Specify what to do if the packet matches (MASQUERADE)
+    // -o: --out-interface (name): Name of an interface via which a packet is going to be sent (serverPublicInterface)
     task.arguments = ["-t", "nat", "-D", "POSTROUTING", "-j", "MASQUERADE", "-o", serverPublicInterface]
 
     do {
@@ -505,6 +536,11 @@ public func deleteServerNAT(serverPublicInterface: String) -> Bool
     task.standardError = errorPipe
 
     task.executableURL = URL(fileURLWithPath: "/usr/sbin/iptables")
+    
+    // -t (table): use (NAT) table [prerouting, output, postrouting]
+    // -D: --delete (chain) (rulenum/rule-specification): delete one or more rules (-j MASQUERADE -o serverPublicInterface) from the selected chain (POSTROUTING)
+    // -j: --jump (target): Specify what to do if the packet matches (MASQUERADE)
+    // -o: --out-interface (name): Name of an interface via which a packet is going to be sent (serverPublicInterface)
     task.arguments = ["-t", "nat", "-D", "POSTROUTING", "-j", "MASQUERADE", "-o", serverPublicInterface]
 
     do {
@@ -548,6 +584,11 @@ public func configServerNATv6(serverPublicInterface: String) -> Bool
     task.executableURL = URL(fileURLWithPath: "/sbin/ip6tables")
 
     //print("enabling NAT for \(serverPublicInterface)")
+    //print("enabling NAT for \(serverPublicInterface)")
+    // -t (table): use (NAT) table [prerouting, output, postrouting]
+    // -A: --append (chain) (rule-specification): Append one or more rules(-j MASQUERADE -o serverPublicInterface) to the end of the selected chain(POSTROUTING)
+    // -j: --jump (target): Specify what to do if the packet matches (MASQUERADE)
+    // -o: --out-interface (name): Name of an interface via which a packet is going to be sent (serverPublicInterface)
     task.arguments = ["-t", "nat", "-A", "POSTROUTING", "-j", "MASQUERADE", "-o", serverPublicInterface ]
 
     do {
@@ -592,6 +633,10 @@ public func configServerNAT(serverPublicInterface: String) -> Bool
     task.executableURL = URL(fileURLWithPath: "/usr/sbin/iptables")
 
     //print("enabling NAT for \(serverPublicInterface)")
+    // -t (table): use (NAT) table [prerouting, output, postrouting]
+    // -A: --append (chain) (rule-specification): Append one or more rules(-j MASQUERADE -o serverPublicInterface) to the end of the selected chain(POSTROUTING)
+    // -j: --jump (target): Specify what to do if the packet matches (MASQUERADE)
+    // -o: --out-interface (name): Name of an interface via which a packet is going to be sent (serverPublicInterface)
     task.arguments = ["-t", "nat", "-A", "POSTROUTING", "-j", "MASQUERADE", "-o", serverPublicInterface ]
 
     do {
@@ -661,7 +706,6 @@ public func setMTU(interface: String, mtu: Int) -> Bool
     let errorData = errorPipe.fileHandleForReading.readDataToEndOfFile()
 
     let output = String(decoding: outputData, as: UTF8.self)
-    //print("iptables NAT config output: \(output)")
     let error = String(decoding: errorData, as: UTF8.self)
 
     if error != "" {
