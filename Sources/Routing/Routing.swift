@@ -509,10 +509,10 @@ public func deleteServerNATv6(serverPublicInterface: String) -> Bool
         return true
     }
 
-    let outputData = outputPipe.fileHandleForReading.readDataToEndOfFile()
+    _ = outputPipe.fileHandleForReading.readDataToEndOfFile()
     let errorData = errorPipe.fileHandleForReading.readDataToEndOfFile()
 
-    let output = String(decoding: outputData, as: UTF8.self)
+    //let output = String(decoding: outputData, as: UTF8.self)
     //print("iptables NAT config output: \(output)")
     let error = String(decoding: errorData, as: UTF8.self)
 
@@ -553,10 +553,10 @@ public func deleteServerNAT(serverPublicInterface: String) -> Bool
         return false
     }
 
-    let outputData = outputPipe.fileHandleForReading.readDataToEndOfFile()
+    _ = outputPipe.fileHandleForReading.readDataToEndOfFile()
     let errorData = errorPipe.fileHandleForReading.readDataToEndOfFile()
 
-    let output = String(decoding: outputData, as: UTF8.self)
+    //let output = String(decoding: outputData, as: UTF8.self)
     //print("iptables NAT config output: \(output)")
     let error = String(decoding: errorData, as: UTF8.self)
 
@@ -601,10 +601,10 @@ public func configServerNATv6(serverPublicInterface: String) -> Bool
         return true
     }
 
-    let outputData = outputPipe.fileHandleForReading.readDataToEndOfFile()
+    _ = outputPipe.fileHandleForReading.readDataToEndOfFile()
     let errorData = errorPipe.fileHandleForReading.readDataToEndOfFile()
 
-    let output = String(decoding: outputData, as: UTF8.self)
+    //let output = String(decoding: outputData, as: UTF8.self)
     //print("iptables NAT config output: \(output)")
     let error = String(decoding: errorData, as: UTF8.self)
 
@@ -649,10 +649,10 @@ public func configServerNAT(serverPublicInterface: String) -> Bool
         return true
     }
 
-    let outputData = outputPipe.fileHandleForReading.readDataToEndOfFile()
+    _ = outputPipe.fileHandleForReading.readDataToEndOfFile()
     let errorData = errorPipe.fileHandleForReading.readDataToEndOfFile()
 
-    let output = String(decoding: outputData, as: UTF8.self)
+    //let output = String(decoding: outputData, as: UTF8.self)
     //print("iptables NAT config output: \(output)")
     let error = String(decoding: errorData, as: UTF8.self)
 
@@ -702,10 +702,10 @@ public func setMTU(interface: String, mtu: Int) -> Bool
         return true
     }
 
-    let outputData = outputPipe.fileHandleForReading.readDataToEndOfFile()
+    _ = outputPipe.fileHandleForReading.readDataToEndOfFile()
     let errorData = errorPipe.fileHandleForReading.readDataToEndOfFile()
 
-    let output = String(decoding: outputData, as: UTF8.self)
+    //let output = String(decoding: outputData, as: UTF8.self)
     let error = String(decoding: errorData, as: UTF8.self)
 
     if error != "" {
