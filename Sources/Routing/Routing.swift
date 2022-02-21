@@ -637,7 +637,8 @@ public func configServerNAT(serverPublicInterface: String) -> Bool
     // -A: --append (chain) (rule-specification): Append one or more rules(-j MASQUERADE -o serverPublicInterface) to the end of the selected chain(POSTROUTING)
     // -j: --jump (target): Specify what to do if the packet matches (MASQUERADE)
     // -o: --out-interface (name): Name of an interface via which a packet is going to be sent (serverPublicInterface)
-    task.arguments = ["-t", "nat", "-A", "POSTROUTING", "-j", "MASQUERADE", "-o", serverPublicInterface ]
+    // iptables -t nat -A POSTROUTING -s 10.200.200.0/24 -o eth0 -j MASQUERADE
+    task.arguments = ["-t", "nat", "-A", "POSTROUTING", "-s", "10.8.0.0/24", "-j", "MASQUERADE", "-o", serverPublicInterface ]
 
     do {
         try task.run()
