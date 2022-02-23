@@ -541,7 +541,7 @@ public func deleteServerNAT(serverPublicInterface: String) -> Bool
     // -D: --delete (chain) (rulenum/rule-specification): delete one or more rules (-j MASQUERADE -o serverPublicInterface) from the selected chain (POSTROUTING)
     // -j: --jump (target): Specify what to do if the packet matches (MASQUERADE)
     // -o: --out-interface (name): Name of an interface via which a packet is going to be sent (serverPublicInterface)
-    task.arguments = ["-t", "nat", "-D", "POSTROUTING", "-j", "MASQUERADE", "-o", serverPublicInterface]
+    task.arguments = ["-t", "nat", "-D", "POSTROUTING", "-s", "10.8.0.0/24", "-j", "MASQUERADE", "-o", serverPublicInterface]
 
     do {
         try task.run()
