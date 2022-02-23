@@ -5,9 +5,9 @@
         "package": "Datable",
         "repositoryURL": "https://github.com/OperatorFoundation/Datable.git",
         "state": {
-          "branch": null,
-          "revision": "31b055da961f794f1a2ce01b5521ee650815a9c9",
-          "version": "3.0.6"
+          "branch": "main",
+          "revision": "f2a622a4f72cccb92d9847ff6616b26e6de25ca3",
+          "version": null
         }
       }
     ]
